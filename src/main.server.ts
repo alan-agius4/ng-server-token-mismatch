@@ -7,7 +7,7 @@
  */
 import '@angular/platform-server/init';
 
-import { enableProdMode } from '@angular/core';
+import { enableProdMode, Type } from '@angular/core';
 
 import { environment } from './environments/environment';
 
@@ -16,4 +16,20 @@ if (environment.production) {
 }
 
 export { AppServerModule } from './app/app.server.module';
-export { renderModule } from '@angular/platform-server';
+
+import { renderModule as renderModuleOriginal } from '@angular/platform-server';
+import { APP_BASE_HREF } from '@angular/common';
+
+export const renderModule = (
+  module: Type<unknown>,
+  options: {
+    document?: string;
+    url?: string;
+    appBaseHref?: string;
+  }
+) =>
+  renderModuleOriginal(module, {
+    url: options.url,
+    document: options.document,
+    extraProviders: [{ provide: APP_BASE_HREF, useValue: options.appBaseHref }],
+  });

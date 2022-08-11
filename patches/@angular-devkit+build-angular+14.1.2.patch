@@ -1,21 +1,17 @@
 diff --git a/node_modules/@angular-devkit/build-angular/src/builders/app-shell/index.js b/node_modules/@angular-devkit/build-angular/src/builders/app-shell/index.js
-index c2975fa..c05bb3d 100644
+index c2975fa..454cb53 100644
 --- a/node_modules/@angular-devkit/build-angular/src/builders/app-shell/index.js
 +++ b/node_modules/@angular-devkit/build-angular/src/builders/app-shell/index.js
-@@ -72,11 +72,18 @@ async function _renderUniversal(options, context, browserResult, serverResult, s
+@@ -72,11 +72,14 @@ async function _renderUniversal(options, context, browserResult, serverResult, s
          if (!(renderModuleFn && AppServerModule)) {
              throw new Error(`renderModule method and/or AppServerModule were not exported from: ${serverBundlePath}.`);
          }
-+
-+        // `APP_BASE_HREF` refers to the token in `node_modules/@angular/common`
-+        // This is because this builder is not bundled as part of the app's code.
-+        const { APP_BASE_HREF } = await import('@angular/common');
 +
          // Load platform server module renderer
          const renderOpts = {
              document: indexHtml,
              url: options.route,
-+            extraProviders: [{provide: APP_BASE_HREF, useValue: '/my/app'}]
++            appBaseHref: '/my/app'
          };
 +
          let html = await renderModuleFn(AppServerModule, renderOpts);
