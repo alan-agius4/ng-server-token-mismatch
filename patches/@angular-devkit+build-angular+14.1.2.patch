@@ -1,8 +1,14 @@
 diff --git a/node_modules/@angular-devkit/build-angular/src/builders/app-shell/index.js b/node_modules/@angular-devkit/build-angular/src/builders/app-shell/index.js
-index c2975fa..454cb53 100644
+index c2975fa..c530d00 100644
 --- a/node_modules/@angular-devkit/build-angular/src/builders/app-shell/index.js
 +++ b/node_modules/@angular-devkit/build-angular/src/builders/app-shell/index.js
-@@ -72,11 +72,14 @@ async function _renderUniversal(options, context, browserResult, serverResult, s
+@@ -67,16 +67,19 @@ async function _renderUniversal(options, context, browserResult, serverResult, s
+         const browserIndexOutputPath = path.join(outputPath, 'index.html');
+         const indexHtml = await fs.promises.readFile(browserIndexOutputPath, 'utf8');
+         const serverBundlePath = await _getServerModuleBundlePath(options, context, serverResult, localeDirectory);
+-        const { AppServerModule, renderModule } = await Promise.resolve().then(() => __importStar(require(serverBundlePath)));
++        const { AppServerModule, renderModule, APP_BASE_HREF } = await Promise.resolve().then(() => __importStar(require(serverBundlePath)));
+         const renderModuleFn = renderModule;
          if (!(renderModuleFn && AppServerModule)) {
              throw new Error(`renderModule method and/or AppServerModule were not exported from: ${serverBundlePath}.`);
          }
@@ -11,7 +17,7 @@ index c2975fa..454cb53 100644
          const renderOpts = {
              document: indexHtml,
              url: options.route,
-+            appBaseHref: '/my/app'
++            extraProviders: [{provide: APP_BASE_HREF, useValue: '/my/app'}]
          };
 +
          let html = await renderModuleFn(AppServerModule, renderOpts);

@@ -16,20 +16,7 @@ if (environment.production) {
 }
 
 export { AppServerModule } from './app/app.server.module';
+export { renderModule } from '@angular/platform-server';
 
-import { renderModule as renderModuleOriginal } from '@angular/platform-server';
-import { APP_BASE_HREF } from '@angular/common';
-
-export const renderModule = (
-  module: Type<unknown>,
-  options: {
-    document?: string;
-    url?: string;
-    appBaseHref?: string;
-  }
-) =>
-  renderModuleOriginal(module, {
-    url: options.url,
-    document: options.document,
-    extraProviders: [{ provide: APP_BASE_HREF, useValue: options.appBaseHref }],
-  });
+// Export the token from the bundle.
+export { APP_BASE_HREF } from '@angular/common';
