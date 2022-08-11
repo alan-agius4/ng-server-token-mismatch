@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, Optional } from '@angular/core';
 import { APP_BASE_HREF } from '@angular/common';
 
 @Component({
@@ -8,9 +8,9 @@ import { APP_BASE_HREF } from '@angular/common';
 })
 export class AppShellComponent implements OnInit {
   // `APP_BASE_HREF` refers to the token in main-server.js
-  constructor(@Inject(APP_BASE_HREF) private appBaseHref: string | undefined) {}
+  constructor(@Optional() @Inject(APP_BASE_HREF) private appBaseHref: string | null) {}
 
   ngOnInit(): void {
-    console.log({ APP_BASE_HREF: this.appBaseHref });
+    console.warn({ APP_BASE_HREF: this.appBaseHref });
   }
 }
